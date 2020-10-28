@@ -16,6 +16,11 @@ var upload = require('./routes/upload');
 
 var app = express();
 
+app.listen(9000, () => {
+  console.log("server started on port 9000");
+});
+
+
 // enable files upload
 app.use(fileUpload({
   createParentPath: true
@@ -47,7 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/testAPI', testAPIRouter);
-app.post('/upload', upload)
+app.post('/upload', upload);
 
 
 // catch 404 and forward to error handler
