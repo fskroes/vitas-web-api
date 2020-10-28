@@ -16,20 +16,15 @@ module.exports = async function upload(req, res) {
                 message: 'No file uploaded'
             });
         } else {
-            console.log('log file', req.files)
             const file = req.files.file;
 
-            Jimp.read(file.data, (err, lenna) => {
+            Jimp.read(file.data, (err, image_file) => {
                 if (err) throw err;
-                lenna
-                    // .resize(224, 224) // resize
-                    // .quality(100) // set JPEG quality
-                    .write('./public/images/lena-small-bw1.jpg'); // save
+                image_file.write('./public/images/lena-small-bw1.jpg'); // save
             });
 
-
             const imageSize = 224
-            const imageBuffer =  fs.readFileSync('./public/images/lena-small-bw1.jpg'); // can also use the async readFile instead
+            const imageBuffer =  fs.readFileSync('./public/images/lena-small-bw1.jpg');
             // get tensor out of the buffer
             image = tfnode.node.decodeImage(imageBuffer, 3);
             // dtype to float
@@ -37,11 +32,6 @@ module.exports = async function upload(req, res) {
             // resize the image
             image = tf.image.resizeBilinear(image, size = [imageSize, imageSize]); // can also use tf.image.resizeNearestNeighbor
             image = image.expandDims(); // to add the most left axis of size 1
-
-
-
-            
-
             
             const model = await tf.loadGraphModel('file://savedmodel/model.json');
             const predictions = await model.predict(image);
@@ -51,19 +41,11 @@ module.exports = async function upload(req, res) {
                 .slice(0, 5);
             console.log(top5)
 
-            // max_prediction_index = prediction.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0)
-            // console.log('max pred:', prediction[max_prediction_index] * 100)
-            
-
             //send response
             res.send({
                 status: true,
                 message: 'File is uploaded',
-                data: {
-                    name: file.name,
-                    mimetype: file.mimetype,
-                    size: file.size
-                }
+                data: { top5 }
             });
         }
     } catch (err) {
