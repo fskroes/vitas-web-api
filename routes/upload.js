@@ -1,9 +1,7 @@
-const { kernel_impls } = require('@tensorflow/tfjs');
 const tf = require('@tensorflow/tfjs')
 const tfnode = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 var Jimp = require('jimp');
-const jpeg = require('jpeg-js');
 
 const DOGBREED_CLASSES = require('../trainedmodel/dog_breed_classes.js')
 
@@ -18,15 +16,23 @@ module.exports = async function upload(req, res) {
         } else {
             const file = req.files.file;
 
-            Jimp.read(file.data, (err, image_file) => {
-                if (err) throw err;
-                image_file.write('./public/images/lena-small-bw1.jpg'); // save
-            });
+            // Jimp.read(file.data, (err, image_file) => {
+            //     if (err) throw err;
+            //     image_file.write('./public/images/lena-small-bw1.jpg'); // save
+            // });
+
+            // const type = 'image/jpeg'
+            // const image = await Jimp.read(file.data)
+            // console.log(image)
+            // const imageData = Jimp.decode(image.bitmap.data)
+            // console.log(imageData)
+
+            
 
             const imageSize = 224
-            const imageBuffer =  fs.readFileSync('./public/images/lena-small-bw1.jpg');
+            // const imageBuffer =  fs.readFileSync(image);
             // get tensor out of the buffer
-            image = tfnode.node.decodeImage(imageBuffer, 3);
+            image = tfnode.node.decodeImage(file.data, 3);
             // dtype to float
             image = image.cast('float32').div(255);
             // resize the image
