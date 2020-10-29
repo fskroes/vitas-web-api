@@ -16,14 +16,9 @@ module.exports = async function upload(req, res) {
         } else {
             const file = req.files.file;
 
-            // Jimp.read(file.data, (err, image_file) => {
-            //     if (err) throw err;
-            //     image_file.write('./public/images/lena-small-bw1.jpg'); // save
-            // });
-
             // const type = 'image/jpeg'
-            // const image = await Jimp.read(file.data)
-            // console.log(image)
+            var image = await (await Jimp.read(file.data)).getBufferAsync("image/jpeg")
+            console.log(image)
             // const imageData = Jimp.decode(image.bitmap.data)
             // console.log(imageData)
 
@@ -32,7 +27,7 @@ module.exports = async function upload(req, res) {
             const imageSize = 224
             // const imageBuffer =  fs.readFileSync(image);
             // get tensor out of the buffer
-            image = tfnode.node.decodeImage(file.data, 3);
+            image = tfnode.node.decodeImage(image, 3);
             // dtype to float
             image = image.cast('float32').div(255);
             // resize the image
