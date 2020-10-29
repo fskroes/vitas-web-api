@@ -16,16 +16,10 @@ module.exports = async function upload(req, res) {
         } else {
             const file = req.files.file;
 
-            // const type = 'image/jpeg'
-            var image = await (await Jimp.read(file.data)).getBufferAsync("image/jpeg")
-            console.log(image)
-            // const imageData = Jimp.decode(image.bitmap.data)
-            // console.log(imageData)
-
-            
+            const mime_type = 'image/jpeg'
+            var image = await (await Jimp.read(file.data)).getBufferAsync(mime_type)
 
             const imageSize = 224
-            // const imageBuffer =  fs.readFileSync(image);
             // get tensor out of the buffer
             image = tfnode.node.decodeImage(image, 3);
             // dtype to float
