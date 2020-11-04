@@ -1,10 +1,9 @@
 const tf = require('@tensorflow/tfjs')
 const tfnode = require('@tensorflow/tfjs-node');
 const customvisionjs = require('@microsoft/customvision-tfjs-node');
-const fs = require('fs');
 var Jimp = require('jimp');
 
-const DOGBREED_CLASSES = require('../savedmodel/dog_breed_classes.js')
+const DOGBREED_CLASSES = require('../savedmodel/dog_breed_classes.js');
 
 
 module.exports = async function upload(req, res) {
@@ -35,31 +34,27 @@ module.exports = async function upload(req, res) {
                 .map(function (p, i) {return {prob: p, class: DOGBREED_CLASSES[i]}; })
                 .sort(function (a, b) {return b.prob - a.prob; })
                 .slice(0, 5);
-            console.log(top5)
+            console.log('TF:', top5)
 
 
-            //
+            
             // ----- CUSTOM VISION 
             //
-            // var vision_model = new customvisionjs.ClassificationModel();
-            // await vision_model.loadModelAsync('file://customvisionmodel/model.json');
             const vision_model_props = await tf.loadGraphModel('file://customvisionmodel/model.json');
 
             const input_size = vision_model_props.inputs[0].shape[1];
             var new_image = tfnode.node.decodeImage(image_buffer, 3)
-            console.log(new_image)
 
             const rgb_image_reverse = preprocess(new_image, input_size)
-            console.log(rgb_image_reverse)
-            //   }
 
             const result = vision_model_props.predict(rgb_image_reverse);
-            // console.log(result);
+            // console.log(result.dataSync())
+            // result.dataSync().forEach(function (p, c) {console.log(p, c)})
             let top5_customvision = Array.from(result.dataSync())
                 .map(function (p, i) {return {prob: p, class: DOGBREED_CLASSES[i]}; })
                 .sort(function (a, b) {return b.prob - a.prob; })
                 .slice(0, 5);
-            console.log(top5_customvision)
+            console.log('CV', top5_customvision)
 
 
 
@@ -83,6 +78,7 @@ function preprocess(image, input_size) {
     const top = h > w ? (h - w) / 2 : 0;
     const left = h > w ? 0 : (w - h) / 2;
     const size = Math.min(h, w);
-    const rgb_image = tfnode.image.cropAndResize(image.expandDims().toFloat(), [[top / h, left / w, (top+size) / h, (left+size) / w]], [0], [input_size, input_size]);
+
+    const rgb_image = tfnode.image.cropAndResize(image.expandDims().toFloat(), [[top / h, left / w, (top+size) / h, (left+size) / w]], [0], [input_size, input_size], 'bilinear');
     return rgb_image.reverse(-1); // RGB -> BGR;
 }
