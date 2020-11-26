@@ -16,9 +16,9 @@ var upload = require('./routes/upload');
 
 var app = express();
 
-app.listen(9000, () => {
-  console.log("server started on port 9000");
-});
+// app.listen(9000, () => {
+//   console.log("server started on port 9000");
+// });
 
 
 // enable files upload
