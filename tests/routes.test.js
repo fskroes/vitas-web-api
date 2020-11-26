@@ -17,9 +17,16 @@ describe('Post Endpoints', () => {
         const res = await request(app)
         .post('/upload')
         .attach('file', filePath, { contentType: 'application/octet-stream' })
+        .expect(200)
 
       expect(res.statusCode).toEqual(200)
       expect(res.body).toHaveProperty('dataCV')
       expect(res.body).toHaveProperty('dataTF')
     })
-  })
+
+    afterAll(async () => {
+      if (app) {
+        await app.close();
+      }
+    });
+})
