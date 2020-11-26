@@ -9,7 +9,8 @@ visit the Jest docs for a full list and details of jest functions.
 **/
 
 const request = require('supertest')
-const app = require('../app')
+// const app = require('../app')
+const app = express();
 const filePath = '../api/public/images/lena-small-bw1.jpg'
 
 describe('Post Endpoints', () => {
