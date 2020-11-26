@@ -29,26 +29,6 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x'                # set this to the node version to use
 
-
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-
-
 jobs:
   build-and-deploy:
     name: Build and Deploy
@@ -60,11 +40,11 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: npm install
-    - run: npm install
+      run: npm install
     - name: npm build
-    - run: npm build
+      run: npm build
     - name: test
-    - run: npm test
+      run: npm test
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
