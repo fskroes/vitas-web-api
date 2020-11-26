@@ -8,6 +8,13 @@ visit the Jest docs for a full list and details of jest functions.
 
 **/
 
+describe('Sample Test for upload', () => {
+  it('should test that true === true', () => {
+    expect(true).toBe(true)
+  })
+})
+
+
 // const request = require('supertest')
 // // const app = require('../app')
 // // const express = require('express')
