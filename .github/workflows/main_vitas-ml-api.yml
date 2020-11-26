@@ -4,11 +4,9 @@
 name: Build and deploy Node.js app to Azure Web App - vitas-ml-api
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
-      - feature/*
 
 jobs:
   build-and-deploy:
@@ -33,5 +31,5 @@ jobs:
       with:
         app-name: 'vitas-ml-api'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8bef2df0a48f46809f8e731b3d394c13 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8b5afb9bd8714c16bf985b36ced904ef }}
         package: .
