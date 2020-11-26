@@ -8,27 +8,27 @@ visit the Jest docs for a full list and details of jest functions.
 
 **/
 
-const request = require('supertest')
-// const app = require('../app')
-// const express = require('express')
-const filePath = '../api/public/images/lena-small-bw1.jpg'
+// const request = require('supertest')
+// // const app = require('../app')
+// // const express = require('express')
+// const filePath = '../api/public/images/lena-small-bw1.jpg'
 
-describe('Post Endpoints', () => {
-    var app = require('../app')
-    it('should create a new post', async () => {
-        const res = await request(app)
-        .post('/upload')
-        .attach('file', filePath, { contentType: 'application/octet-stream' })
-        // .expect(200)
+// describe('Post Endpoints', () => {
+//     var app = require('../app')
+//     it('should create a new post', async () => {
+//         const res = await request(app)
+//         .post('/upload')
+//         .attach('file', filePath, { contentType: 'application/octet-stream' })
+//         // .expect(200)
 
-      expect(res.statusCode).toEqual(200)
-      expect(res.body).toHaveProperty('dataCV')
-      expect(res.body).toHaveProperty('dataTF')
-    })
+//       expect(res.statusCode).toEqual(200)
+//       expect(res.body).toHaveProperty('dataCV')
+//       expect(res.body).toHaveProperty('dataTF')
+//     })
 
-    afterAll(async () => {
-      if (app) {
-        await app.close();
-      }
-    });
-})
+//     afterAll(async () => {
+//       if (app) {
+//         await app.close();
+//       }
+//     });
+// })
