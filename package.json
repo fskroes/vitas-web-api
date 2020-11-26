@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon app.js",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "jest"
   },
   "dependencies": {
     "@microsoft/customvision-tfjs": "^1.1.0",
